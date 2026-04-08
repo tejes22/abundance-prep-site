@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abundance — Fundraising Prep</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --bg: #0a0a0b;
+    --bg-card: #111113;
+    --bg-hover: #1a1a1e;
+    --bg-sidebar: #0e0e10;
+    --border: #222228;
+    --border-active: #4f46e5;
+    --text: #e4e4e7;
+    --text-muted: #71717a;
+    --text-dim: #52525b;
+    --accent: #818cf8;
+    --accent-glow: rgba(129, 140, 248, 0.12);
+    --green: #34d399;
+    --orange: #fb923c;
+    --red: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    padding: 32px 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-brand {
+    padding: 0 24px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-brand h1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .sidebar-brand p {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 24px;
+  }
+
+  .sidebar-section-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 24px;
+    margin-bottom: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border-left: 2px solid transparent;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    background: var(--accent-glow);
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .nav-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  .nav-item[data-doc="narrative"] .nav-icon { background: rgba(129, 140, 248, 0.15); color: var(--accent); }
+  .nav-item[data-doc="reference"] .nav-icon { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+  .nav-item[data-doc="meeting"] .nav-icon { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+  .nav-item[data-doc="script"] .nav-icon { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+  .nav-item[data-doc="david"] .nav-icon { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sidebar-footer p {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* TOC */
+  .toc-list {
+    padding: 0 24px;
+    margin-top: 4px;
+  }
+
+  .toc-item {
+    display: block;
+    padding: 4px 0 4px 16px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.15s;
+    border-left: 1px solid var(--border);
+    text-decoration: none;
+  }
+
+  .toc-item:hover {
+    color: var(--text-muted);
+  }
+
+  /* Main content */
+  .main {
+    margin-left: 280px;
+    flex: 1;
+    min-height: 100vh;
+  }
+
+  .doc-container {
+    display: none;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 48px 120px;
+  }
+
+  .doc-container.active {
+    display: block;
+  }
+
+  /* Typography */
+  .doc-container h1 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .doc-container h2 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-top: 56px;
+    margin-bottom: 20px;
+    color: #fff;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .doc-container h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: 36px;
+    margin-bottom: 12px;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+  }
+
+  .doc-container h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .doc-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 48px;
+  }
+
+  .doc-container p {
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .doc-container strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .doc-container em {
+    font-family: 'Newsreader', Georgia, serif;
+    font-style: italic;
+    color: var(--text);
+  }
+
+  .doc-container ul, .doc-container ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+
+  .doc-container li {
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .doc-container li::marker {
+    color: var(--text-dim);
+  }
+
+  .doc-container a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .doc-container a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  /* Blockquotes — used for pitch scripts */
+  .doc-container blockquote {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-glow);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .doc-container blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  .doc-container blockquote strong {
+    color: var(--accent);
+  }
+
+  /* Code blocks */
+  .doc-container code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85em;
+    background: var(--bg-hover);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--green);
+  }
+
+  .doc-container pre {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .doc-container pre code {
+    background: none;
+    padding: 0;
+    color: var(--text-muted);
+  }
+
+  /* Tables */
+  .doc-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.875rem;
+  }
+
+  .doc-container thead th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .doc-container tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .doc-container tbody tr:hover {
+    background: var(--bg-hover);
+  }
+
+  /* Horizontal rule — section dividers */
+  .doc-container hr {
+    border: none;
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* Special callout boxes */
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+
+  .callout-accent {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  /* Section number pills for the narrative */
+  .section-num {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  /* Cheat sheet grid */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .cheat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .cheat-card h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+
+  .cheat-card.hans { border-top: 3px solid var(--accent); }
+  .cheat-card.oren { border-top: 3px solid var(--orange); }
+  .cheat-card.cami { border-top: 3px solid var(--green); }
+
+  /* Progress bar at top */
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 280px;
+    right: 0;
+    height: 2px;
+    background: var(--bg);
+    z-index: 99;
+  }
+
+  .reading-progress-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+
+    .main {
+      margin-left: 0;
+    }
+
+    .doc-container {
+      padding: 32px 20px 80px;
+    }
+
+    .reading-progress { left: 0; }
+    .toc-list { display: none; }
+    .sidebar-footer { display: none; }
+
+    .cheat-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Scroll fade in */
+  .fade-section {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .fade-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Abundance</h1>
+    <p>Fundraising Prep Suite</p>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section-label">Documents</div>
+
+  <div class="nav-item active" data-doc="narrative" onclick="switchDoc('narrative')">
+    <span class="nav-icon">N</span>
+    Fundraising Narrative
+  </div>
+  <div class="nav-item" data-doc="reference" onclick="switchDoc('reference')">
+    <span class="nav-icon">R</span>
+    Reference Guide
+  </div>
+  <div class="nav-item" data-doc="meeting" onclick="switchDoc('meeting')">
+    <span class="nav-icon">M</span>
+    Notable Capital Prep
+  </div>
+  <div class="nav-item" data-doc="script" onclick="switchDoc('script')">
+    <span class="nav-icon">S</span>
+    Meeting Script
+  </div>
+  <div class="nav-item" data-doc="david" onclick="switchDoc('david')">
+    <span class="nav-icon">D</span>
+    David's Prep
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section-label" id="toc-label">Sections</div>
+  <div class="toc-list" id="toc"></div>
+
+  <div class="sidebar-footer">
+    <p>Updated April 7, 2026<br>Sources: Bilal call, Notable transcript, Granola notes</p>
+  </div>
+</nav>
+
+<div class="reading-progress">
+  <div class="reading-progress-bar" id="progress-bar"></div>
+</div>
+
+<main class="main" id="main-scroll">
+
+<!-- ==================== NARRATIVE ==================== -->
+<div class="doc-container active" id="doc-narrative">
+
+<h1>Abundance</h1>
+<p class="doc-subtitle">Fundraising Narrative &mdash; Draft 2</p>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">I &mdash; The Problem</span>
+<h2 id="n-problem">Every robot on Earth is blind.</h2>
+
+<p>Not literally. They have cameras, force sensors, depth scanners, tactile arrays. They can see objects. They can measure distance. They can detect contact.</p>
+
+<p>But they don't understand <em>tasks</em>.</p>
+
+<p>Put the most advanced robot in the world in front of a dishwasher it hasn't been specifically trained on, and it is lost. Not because it can't see the dishes. Because it has no concept of what "loading a dishwasher" actually <em>is</em> &mdash; where the critical decision points are, what separates a competent grasp from a catastrophic one, why the spray arm matters, when to slow down, when to commit.</p>
+
+<p>That knowledge &mdash; the deep structure of how tasks work &mdash; does not exist anywhere in the robotics stack. Not in the foundation models. Not in the training data. Not in the simulation environments. Not in any product you can buy.</p>
+
+<p>It is the single most important missing piece in physical AI. And we built it.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">II &mdash; The Market</span>
+<h2 id="n-market">$8 billion deployed. Same problem everywhere.</h2>
+
+<p>$8 billion has been deployed into robot foundation models in the last eighteen months. Physical Intelligence. Figure. Covariant. Generalist. Google DeepMind. Tesla. Nvidia pouring billions into simulation infrastructure.</p>
+
+<p>All of them are chasing the same loop: collect data, train a policy, deploy, repeat.</p>
+
+<p>And all of them have the same problem.</p>
+
+<p>The task knowledge gets entombed inside the policy weights. It is not portable. It is not interpretable. It is not reusable. Pi cannot use what Figure learned. Figure cannot use what Tesla learned. Every new task, every new embodiment, every new environment &mdash; you start over. You retrain from scratch with millions of dollars in compute and months of data collection.</p>
+
+<p>Meanwhile, the planet generates more useful data every single day than these labs could collect in a decade. Factory workers. Warehouse operators. Surgeons. Cooks. Mechanics. Cleaners. Every human performing a physical task is demonstrating exactly the knowledge these models need.</p>
+
+<p>But nobody can use it. Not because the data doesn't exist. Because there is no system in the world that can extract <em>what it means</em>.</p>
+
+<p>You can label it. You can segment it. You can annotate every frame. You still don't know how a task works. You know what happened in a video. Those are completely different things.</p>
+
+<p>The bottleneck in robotics is not data volume. It is not compute. It is not model size. <strong>The bottleneck is that nobody has built the interpretation layer.</strong></p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">III &mdash; The Insight</span>
+<h2 id="n-insight">We found the answer in the body.</h2>
+
+<p>We didn't find the answer in AI. We found it in developmental biology.</p>
+
+<p>When a salamander loses a limb, the cells at the wound site don't contain a blueprint for "leg." There is no instruction manual. No master plan stored in DNA. Instead, there is an energy field &mdash; a morphogenetic field &mdash; that encodes the target form. Every cell reads the field and navigates toward the correct structure on its own. The field doesn't tell each cell what to do. It tells every cell <em>where to go</em>.</p>
+
+<p>Change the cells &mdash; the field still works. Transplant tissue from a different part of the body &mdash; it reads the field and becomes the right thing. The intelligence is not in the cells. <strong>The intelligence is in the field.</strong></p>
+
+<p>This is Michael Levin's work at Tufts. It is one of the most important scientific discoveries of the last twenty years. And it is mathematically identical to what we build for robots.</p>
+
+<p>We construct an energy field for physical tasks.</p>
+
+<p>Not a policy that tells a specific robot what to do step by step &mdash; that breaks the moment anything changes. An energy field that encodes <em>what the task looks like when it's done right</em>. Any robot reads the field and finds its own way there.</p>
+
+<p>Change the robot &mdash; the field still works. Change the environment &mdash; the field still works. Change the model architecture &mdash; the field still works. Because the field doesn't encode how a particular body moves. It encodes how reality is structured when a task succeeds.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">IV &mdash; The Architecture</span>
+<h2 id="n-architecture">The ontological layer for physical AI.</h2>
+
+<p>For every task, we learn two things from diverse human demonstrations:</p>
+
+<p><strong>A task manifold.</strong> The topology of the task itself &mdash; a low-dimensional map of every meaningful state and transition, independent of any body. Picking up the dish. Choosing the rack position. Placing. Confirming clearance. This is the skeletal structure of competence. The ontology of the task &mdash; what states exist and how they relate.</p>
+
+<p><strong>An energy landscape over that manifold.</strong> A scalar field that scores every configuration. Low energy: goal states, stable success, deep basins. High energy: failure boundaries, ridges, danger zones. The gradient points downhill toward success. Saddle points mark where decisions must be made. Bifurcations mark where small errors cascade into failures.</p>
+
+<blockquote>
+<p>The manifold defines what exists. The landscape defines what's optimal. The gradient says how to get there.</p>
+</blockquote>
+
+<p>This is not a metaphor for what Palantir built. It is the same architecture.</p>
+
+<p>Palantir took messy, siloed intelligence data &mdash; from the CIA, NSA, financial institutions &mdash; and built an ontological layer: a system that defines entities, relationships, and patterns across domains, making raw data queryable and actionable regardless of where it came from. The data sources change. The ontological layer remains. It became the most valuable part of the stack. Today Palantir is worth $260 billion.</p>
+
+<p>We are doing the same thing for the physical world.</p>
+
+<p>Our manifold is the ontology &mdash; it defines the entities and states of physical tasks. Our energy landscape is the scoring layer &mdash; it defines which states are optimal and how to navigate between them. The robots change. The model architectures change. The training paradigms change. The landscape remains. Because task physics don't care how you train.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">V &mdash; The Product</span>
+<h2 id="n-product">330 megabytes. Not data. The map.</h2>
+
+<p>Here is what hits a robot company's servers.</p>
+
+<p>A 330-megabyte frozen package. Not our data. Not our demonstrations. Not labeled video. The map.</p>
+
+<p>They run 50 of their own robot episodes through a localization adapter. Takes hours. And then their robot knows where it is on our landscape for that task &mdash; and more importantly, it knows which direction leads to success.</p>
+
+<p><strong>For training</strong>: the landscape replaces the brittle, hand-crafted sparse rewards that are the single biggest bottleneck in robot RL today. Instead of "did you succeed? yes/no" &mdash; the robot gets a dense signal at every timestep. Not just <em>whether</em> it's failing, but <em>where</em> it's failing and <em>why</em>. "Policy fails at spray arm clearance in 29% of episodes because it rushes through rack positioning." No other system in the world can produce that sentence.</p>
+
+<p><strong>For evaluation</strong>: subgoal-level scoring, coverage analysis, failure diagnosis by task phase. Every lab we talk to says this is the eval system they desperately need. Nobody has built it because you cannot build it without the ontological structure underneath.</p>
+
+<p><strong>For control</strong>: the gradient of the energy landscape injects directly into action generation at inference time. No retraining. The policy says what's physically possible for this body. The landscape says where the task wants to go. You blend them. This is classifier guidance for robotics &mdash; and we already have the integration designed for pi0.6's flow-matching architecture.</p>
+
+<p>Three product surfaces from one underlying system. Each independently valuable. Together, they make the landscape load-bearing infrastructure for anyone building robots.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">VI &mdash; The Data Engine</span>
+<h2 id="n-data">The chaos is the signal.</h2>
+
+<p>The landscape is only as good as the data that builds it. And here is where our moat becomes a wall.</p>
+
+<p>What makes the energy landscape work is not volume of data. It is <em>variance</em>. An expert loading a dishwasher in a restaurant kitchen in Bangalore. A college student fumbling through it in an apartment in San Francisco. A factory worker in Shenzhen. A grandmother in Lagos. The expert flows downhill through the landscape &mdash; smooth, low energy, efficient. The novice wanders along ridges &mdash; high energy, hesitation, recovery. The difference between those trajectories is where task intelligence lives.</p>
+
+<p>You could spend a billion dollars collecting perfect demonstrations in a lab. It would produce a worse landscape than what we build from the chaos of the real world. Because the chaos is the signal.</p>
+
+<p>So we built the collection engine.</p>
+
+<p>Our app lets anyone on Earth record themselves performing a task and get paid. We assess quality and relevance automatically. If it's useful, it enters the pipeline. If not, it doesn't. The contributor gets paid either way for their time. The economics work because we don't need perfection. We need diversity at scale.</p>
+
+<p>And then the flywheel turns.</p>
+
+<p>More demonstrations. Richer manifold. Better reward signals. More labs want access. More revenue. We subsidize more collection. More diversity. Deeper landscape. The compounding advantage accelerates every cycle.</p>
+
+<p>We chose the Tesla model, not the Waymo model. Waymo spent billions deploying proprietary vehicles to map the world. Slow, expensive, and brittle. Tesla put sensors on millions of cars that people already drove. Every driver generates data. Every mile makes the model smarter. Zero marginal cost.</p>
+
+<p><strong>Our app is the Tesla fleet. The humans are the drivers. The landscape is FSD.</strong> And every task that every person performs anywhere in the world makes it better.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">VII &mdash; The Identity</span>
+<h2 id="n-identity">What this company is.</h2>
+
+<p>We are not a data broker. We never sell raw data. The difference between us and Scale AI is the difference between crude oil and jet fuel. Our customers receive distilled task intelligence &mdash; the manifold, the landscape, the gradient &mdash; in a package they can plug into any training pipeline.</p>
+
+<p>We are not an eval company. Eval is one surface of the product, not the product itself. The landscape is simultaneously reward model, eval system, diagnostic engine, and control signal.</p>
+
+<p>We are not a foundation model company. We are not competing with Pi or DeepMind on parameters. We are building the layer they need and cannot build themselves.</p>
+
+<p><strong>We are building the task intelligence layer for physical AI.</strong></p>
+
+<p>The interpretation system that sits between the world's data and the world's robots and makes one legible to the other. The ontological layer for the physical world.</p>
+
+<p>And along the way &mdash; because we will have the deepest understanding of task physics of anyone on the planet &mdash; we build our own models. Not the biggest. The smartest. Compact, efficient models that read the landscape and execute. We don't need a billion parameters. We need the map.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">VIII &mdash; The Proof</span>
+<h2 id="n-proof">Not speculative. Grounded.</h2>
+
+<p>The research is not speculative. The theoretical foundation is published. The morphogenetic framework is grounded in Levin's bioelectric morphogenesis and recent mathematical proofs that representational geometry in neural networks is a direct consequence of symmetry in data statistics. The manifold's shape is analytically predictable from task structure. It is not a black box.</p>
+
+<p>Our research lead developed this framework independently from years of experience in robot learning at Tesla. He is co-authoring the white paper. He speaks to our team multiple times a week. This is his primary research bet.</p>
+
+<p>The execution plan is phased and concrete. Baseline established on standard benchmarks. Landscape model trained on contact-rich datasets with force-torque and tactile sensing. Validated on a golden set of curated demonstrations. Integrated with pi0.6's advantage conditioning. Cross-embodiment transfer proven from human video to robot guidance.</p>
+
+<p>We have strategic engagements with DeepMind, NVIDIA, and several leading robotics labs. The app is live. The data pipeline works. The slope of data ingestion is steeper than anyone else in the space.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">IX &mdash; The Ask</span>
+<h2 id="n-ask">$20 million. The window is now.</h2>
+
+<p>We are raising $20 million.</p>
+
+<p>The capital buys three things: the data moat, the research, and the first shipped product.</p>
+
+<p>First &mdash; subsidize the marketplace until the flywheel is self-sustaining. Contributors get paid. That is our primary variable cost and it is what produces the diversity that no one else has.</p>
+
+<p>Second &mdash; the research team to build the landscape across task domains, validate it against state-of-the-art policies, and publish the results.</p>
+
+<p>Third &mdash; ship the first landscape packages to partners and prove that our reward signal measurably improves downstream robot performance on real tasks.</p>
+
+<p>The window is now. Foundation models are commoditizing. Open-source is catching up. Every major lab is starting to hire commercial teams because the model alone isn't the business. The question the entire industry is about to confront is: <em>what layer actually captures the value?</em></p>
+
+<p>A thousand flowers are blooming in robotics right now. Flow-matching. JEPA. World models. Simulation. Reinforcement learning. Every one of them is getting siloed. Every one of them needs the same thing. None of them are building it.</p>
+
+<p>We are.</p>
+</div>
+
+<hr>
+
+<div class="fade-section" style="text-align:center; padding: 40px 0;">
+<p style="font-family: 'Newsreader', Georgia, serif; font-size: 1.3rem; color: #fff; line-height: 1.6;"><strong>Abundance turns human behavior into task intelligence for robots.</strong></p>
+<p style="color: var(--text-muted); margin-top: 16px;">We do not sell data. We transform it into the map.</p>
+<p style="color: var(--text-dim); margin-top: 8px; font-size: 0.9rem;">The manifold defines what exists. The landscape defines what's optimal. The gradient tells you how to get there.</p>
+<p style="color: var(--accent); margin-top: 16px; font-weight: 500;">This is the ontological layer for physical AI.</p>
+<p style="color: var(--text-dim); margin-top: 8px; font-size: 0.85rem;">And it is the most important piece of infrastructure that nobody has built. Until now.</p>
+</div>
+
+</div>
+
+<!-- ==================== REFERENCE ==================== -->
+<div class="doc-container" id="doc-reference">
+
+<h1>Narrative Reference Guide</h1>
+<p class="doc-subtitle">Strategy, objections, fundraising playbook &mdash; the tactical companion to the pitch.</p>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-oneliners">Audience-Specific Framings</h2>
+
+<h3>For investors (Palantir language)</h3>
+<blockquote><p>"We build the ontological layer for physical AI &mdash; defining what states exist in a task, which are optimal, and how any robot gets there. Same architecture Palantir uses for intelligence data, applied to robot intelligence."</p></blockquote>
+
+<h3>For researchers (technical language)</h3>
+<blockquote><p>"Task intelligence lives in the landscape, not the agent. We learn embodiment-agnostic energy landscapes from human demonstrations that any robot can navigate."</p></blockquote>
+
+<h3>For customers (product language)</h3>
+<blockquote><p>"A 330MB package that tells your robot where it is in a task and what to do next. 50 episodes to calibrate. Hours, not months."</p></blockquote>
+
+<h3>For press (accessible language)</h3>
+<blockquote><p>"The missing layer between data and deployment: a universal task physics engine learned from human behavior."</p></blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-architecture">The Ontology-Landscape Architecture</h2>
+
+<p>The Palantir parallel is architecturally exact:</p>
+
+<pre><code>Ontology (M)      &rarr;  defines what states exist
+Energy landscape (V) &rarr;  defines which states are stable or preferred
+Gradient (&nabla;V)      &rarr;  how to navigate from current to desired state</code></pre>
+
+<table>
+<thead><tr><th></th><th>Palantir</th><th>Abundance</th></tr></thead>
+<tbody>
+<tr><td><strong>Ontology</strong></td><td>Entities, relationships, events across domains</td><td>Task phases, object states, valid transitions (M)</td></tr>
+<tr><td><strong>Scoring</strong></td><td>Analytics identifying patterns, anomalies, risks</td><td>Energy landscape identifying optimal trajectories, failures (V)</td></tr>
+<tr><td><strong>Navigation</strong></td><td>Analysts traverse ontology for intelligence</td><td>Robots traverse landscape for optimal actions (&nabla;V)</td></tr>
+<tr><td><strong>Domain-agnostic</strong></td><td>Works across banking, defense, pharma</td><td>Works across embodiments, paradigms, task types</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-competitive">Competitive Differentiation</h2>
+
+<table>
+<thead><tr><th>Approach</th><th>The Problem</th><th>Abundance</th></tr></thead>
+<tbody>
+<tr><td><strong>Behavior cloning / VLAs</strong></td><td>Task knowledge baked into weights. Not transferable.</td><td>Task knowledge lives in the landscape. Portable.</td></tr>
+<tr><td><strong>Physical Intelligence</strong></td><td>Found human-robot convergence accidentally via brute-force scaling.</td><td>We build this convergence explicitly. No scale requirement.</td></tr>
+<tr><td><strong>Scale AI</strong></td><td>Sells raw data. Commodity. Race to bottom.</td><td>We sell the map. Distilled intelligence. Never raw data.</td></tr>
+<tr><td><strong>Eval companies</strong></td><td>Benchmarks. Small market. At mercy of labs.</td><td>Landscape is reward model + eval + diagnostic + control signal.</td></tr>
+<tr><td><strong>Simulation cos</strong></td><td>Visual sandboxes. No real-world physics.</td><td>Grounded in force-torque, tactile, multi-style demonstrations.</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-trajectory">Palantir Trajectory Parallel</h2>
+
+<table>
+<thead><tr><th>Phase</th><th>Palantir</th><th>Abundance</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Ingest</strong></td><td>Messy data from CIA, NSA, banks</td><td>Human video from global app network</td></tr>
+<tr><td><strong>2. Build layer</strong></td><td>Ontology: entities + relationships</td><td>Manifold (M) + Energy landscape (V)</td></tr>
+<tr><td><strong>3. Indispensable</strong></td><td>Swap data sources, can't remove ontology</td><td>Swap robots/paradigms, can't remove landscape</td></tr>
+<tr><td><strong>4. Own products</strong></td><td>AIP, MAVEN, Gotham</td><td>Own compact models that read the landscape</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-business">Business Model &amp; Revenue Path</h2>
+
+<h3>Near-term (now &rarr; 12 months): Strategic Data Engagements</h3>
+<ul>
+<li>Active conversations with Figure, DeepMind, Skills, RoDa</li>
+<li>Frame as "strategic partnerships" not data sales</li>
+<li>Revenue subsidizes marketplace growth</li>
+</ul>
+
+<h3>Medium-term (12 &rarr; 24 months): Landscape-as-a-Service</h3>
+<ul>
+<li>Task library: pre-built V+M packages</li>
+<li>Reward model API: dense signal for any robot's RL</li>
+<li>Eval platform: subgoal-level scoring, failure diagnosis</li>
+</ul>
+
+<h3>Long-term (24+ months): Own Models</h3>
+<ul>
+<li>Compact, efficient models that read the landscape</li>
+<li>Model-as-a-service: charging for compute</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-fundraising">Fundraising Strategy</h2>
+
+<ul>
+<li>Lead with <strong>$20M target</strong></li>
+<li>As interest builds, expand to $30M with price increase</li>
+<li>Need one anchor check of $10-15M</li>
+<li><strong>Prep time:</strong> 4-6 weeks (story, deck, white paper, Hari, video)</li>
+<li><strong>Pitch window:</strong> 2 weeks, tightly scheduled</li>
+<li><strong>Expect:</strong> every investor calls their portfolio companies</li>
+</ul>
+
+<h3>What to Avoid</h3>
+<ul>
+<li>"We buy data and resell it" (commodity broker)</li>
+<li>"We have 17 benchmarks" (small eval market)</li>
+<li>"We need to raise money" (white elephant)</li>
+<li>Leading with hardware (old framing)</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-objections">Key Objections &amp; Responses</h2>
+
+<h3>"Why isn't Hari full-time?"</h3>
+<blockquote><p>Hari is building multiple things under one holding company &mdash; including a distributed data center project in Asia. Abundance is a core part of his portfolio. He functions as ghost co-founder and research lead. Multiple calls per week, co-authored the white paper, directly mentors our research team.</p></blockquote>
+
+<h3>"How is this different from Scale AI?"</h3>
+<blockquote><p>Scale sells labeled data. We sell task intelligence. Customers never see raw data &mdash; they get a 330MB frozen package. This is the difference between crude oil and jet fuel. The process requires diverse, multi-skill-level demonstrations that take years to accumulate.</p></blockquote>
+
+<h3>"This seems very researchy."</h3>
+<blockquote><p>It's already a business. Paying strategic partners. Live marketplace. The research makes us defensible and makes this a $10B+ outcome rather than a commodity data play. This is the Palantir trajectory: data partnerships first, ontological layer second, indispensable third.</p></blockquote>
+
+<h3>"What if a big lab builds this?"</h3>
+<blockquote><p>Three reasons they won't. Siloed by embodiment. Don't have our data diversity. The approach is architecturally novel &mdash; Pi found human-robot convergence accidentally through brute-force. We engineered the framework deliberately.</p></blockquote>
+
+<h3>"Pre-revenue on research. Why $20M?"</h3>
+<blockquote><p>Data is a compounding advantage. Every day we're not collecting diverse demonstrations, someone else could be. $20M buys the data moat, the research team, and 18 months to publish, ship, and demonstrate downstream improvement.</p></blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="r-investors">Three Things Investors Need to See</h2>
+
+<h3>1. Team with Research Credibility</h3>
+<p><strong>Vulnerability:</strong> "Enterprising young founders collecting data in Bangalore."</p>
+<p><strong>Counter:</strong> Hari (ghost co-founder, Tesla robotics, co-author on white paper). First researcher hired via Sreehari referral. Phased execution plan (PRISM: Baseline &rarr; Landscape &rarr; RECAP &rarr; Cross-embodiment).</p>
+
+<h3>2. The Ontological Layer is Real</h3>
+<p>White paper + PRISM paper + live app = "Not a pitch deck. A working system with a rigorous scientific foundation."</p>
+<p><strong>Demo concept:</strong> Two glass boxes in SF &mdash; robot on left, human with device on right, same task, connected.</p>
+
+<h3>3. Momentum</h3>
+<p>App growing (slope &gt; absolute). DeepMind + NVIDIA conversations. Paying data customers. Hari podcast before fundraise. 2-min vision video.</p>
+</div>
+
+</div>
+
+<!-- ==================== MEETING PREP ==================== -->
+<div class="doc-container" id="doc-meeting">
+
+<h1>Notable Capital Meeting Prep</h1>
+<p class="doc-subtitle">Hans Tung &amp; Oren Yunger &mdash; Managing Partners, Notable Capital (~$5B AUM)</p>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-context">Context</h2>
+
+<p><strong>Who they are:</strong> Both Managing Partners at Notable Capital (formerly GGV Capital). They reached out to you &mdash; this was inbound. Notable split from GGV's Asia operations in March 2024.</p>
+
+<p><strong>Why this matters:</strong> Notable writes $10-20M lead checks at Series A. Hans has 24+ unicorns including Anthropic, Airbnb, ByteDance. Oren runs InvestInData (30+ CDOs) and led Monte Carlo, Tonic, Browserbase. Both partners in one room = serious look.</p>
+
+<p><strong>Your posture:</strong> Deliver the narrative with conviction. This is not a "getting to know you" meeting. This is a pitch for the most important missing layer in robotics.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-profiles">The Two Audiences</h2>
+
+<div class="cheat-grid">
+<div class="cheat-card hans">
+<h4>Hans Tung &mdash; The Pattern Recognizer</h4>
+<p><strong>Invests in:</strong> AI-driven prosumer platforms, community + content + commerce. Airbnb, Anthropic, ByteDance, Wispr.</p>
+<p><strong>Thinks in:</strong> Cross-geography analogies. Behavioral science. Long-term compounding. 8 years in China watching data flywheels.</p>
+<p><strong>Lights up for:</strong> Transformational vision. Learning velocity. Prosumer dynamics. Global-from-day-one. "Long-term greedy" founders.</p>
+<p><strong>Your angle:</strong> App = prosumer platform. Flywheel = ByteDance pattern. Global collection = "heavily stamped passports." Palantir endgame = $260B.</p>
+<p><strong>Risk:</strong> No prior robotics investments. Needs to believe this is AI infrastructure, not hardware.</p>
+</div>
+
+<div class="cheat-card oren">
+<h4>Oren Yunger &mdash; The Operator-Investor</h4>
+<p><strong>Invests in:</strong> Data infra, AI infra, cybersecurity, dev tools. Monte Carlo, Tonic, Browserbase, Anthropic.</p>
+<p><strong>Thinks in:</strong> Practitioner lens. 12yr CISO. Validates with 10 buyers in days. Runs InvestInData syndicate of 30+ CDOs.</p>
+<p><strong>Lights up for:</strong> "Critical problem, no solution, eager buyer." Data quality. Capital efficiency + growth. Differentiated GTM.</p>
+<p><strong>Your angle:</strong> Monte Carlo for robotics pipelines. "Faulty data is worthless." Landscape = data quality scoring layer. 330MB = concrete product.</p>
+<p><strong>Risk:</strong> Portfolio is enterprise software. Needs a bridge to his mental models. Will reference-check with labs fast.</p>
+</div>
+</div>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-open">How to Open</h2>
+
+<p>Do NOT open with "we're building a robotics data collection platform." Lead with the problem:</p>
+
+<blockquote>
+<p>"Every robot on Earth is blind &mdash; not literally, but they don't understand tasks. $8 billion has gone into robot foundation models, and every lab has the same problem: task knowledge gets entombed inside policy weights. Not portable, not interpretable, not reusable.</p>
+<p>The bottleneck is not data or compute. It's that nobody has built the interpretation layer."</p>
+</blockquote>
+
+<p>Then pause. Let them react. Hans starts pattern-matching. Oren starts thinking about data infrastructure. Then deliver the insight.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-insight">How to Deliver the Insight</h2>
+
+<h3>Biology &rarr; Architecture</h3>
+<blockquote>
+<p>"We found the answer in developmental biology. When a salamander loses a limb, the cells don't carry a blueprint. There's an external energy field that encodes the target form. Every cell reads the field and finds its own path. <strong>The intelligence is not in the cells. It's in the field.</strong></p>
+<p>We build the same thing for physical tasks. Any robot reads the field and finds its own way there."</p>
+</blockquote>
+
+<h3>Ground it technically (for Oren)</h3>
+<blockquote>
+<p>"Concretely: task manifold &mdash; the ontology of what states exist. Energy landscape &mdash; scores every configuration. 330MB package. 50 episodes to calibrate. Dense rewards, interpretable eval, gradient-based control."</p>
+</blockquote>
+
+<h3>Palantir frame (for Hans)</h3>
+<blockquote>
+<p>"This is architecturally what Palantir built for intelligence data &mdash; an ontological layer that makes messy, siloed data actionable across domains. Same structure, applied to the physical world."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-data">How to Talk About the Data Engine</h2>
+
+<blockquote>
+<p>"We chose the Tesla model. Our app lets anyone on Earth record themselves performing a task and get paid. What makes the landscape work isn't perfect data &mdash; it's diverse data. An expert flows downhill. A novice wanders on ridges. That variance is where task intelligence lives.</p>
+<p>The flywheel: more demonstrations &rarr; richer manifold &rarr; better rewards &rarr; more labs &rarr; more revenue &rarr; more collection &rarr; deeper landscape."</p>
+</blockquote>
+
+<p><strong>For Hans:</strong> "Community + content + commerce for physical AI. The community is global contributors. The content is demonstrations. The commerce is labs paying for the landscape."</p>
+
+<p><strong>For Oren:</strong> "This is Monte Carlo for robot training pipelines. Nobody in robotics can tell you which training data is actually valuable. We can."</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-questions">Questions They'll Ask</h2>
+
+<h3>Hans's questions</h3>
+
+<h4>"What's the defensibility?"</h4>
+<blockquote><p>Three reasons labs won't build this: siloed by embodiment, don't have our data diversity, and the approach is architecturally novel. Pi found convergence accidentally through brute-force. We engineered the framework.</p></blockquote>
+
+<h4>"How fast are you learning?"</h4>
+<blockquote><p>His #1 predictor. Have a specific answer ready: "Six months ago we were building $20 capture hardware. We killed it and built the app instead. Diversity matters more than precision."</p></blockquote>
+
+<h4>"Who loves you?"</h4>
+<blockquote><p>Name the most engaged lab. Be specific about what they use and why they can't get it elsewhere.</p></blockquote>
+
+<h3>Oren's questions</h3>
+
+<h4>"Walk me through the data pipeline."</h4>
+<blockquote><p>Video uploaded &rarr; quality assessment &rarr; accepted/rejected &rarr; skill-level classification &rarr; manifold pipeline &rarr; landscape updated &rarr; packaged for delivery. He's an operator. He wants the system.</p></blockquote>
+
+<h4>"What's the go-to-market?"</h4>
+<blockquote><p>Phase 1: strategic data engagements. Phase 2: landscape-as-a-service (330MB + API). Phase 3: load-bearing infra. Bottom-up adoption: ML engineer tries it on one task, sees it outperform, pulls into more.</p></blockquote>
+
+<h4>"How do you know it improves performance?"</h4>
+<blockquote><p>Evaluation chain: golden set (minutes) &rarr; MolmoSpaces (230K+ envs, sim-to-real R=0.96) &rarr; RoboArena (real-world). PRISM integration replaces pi0.6's scalar with our full landscape.</p></blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-ask-them">What to Ask Them</h2>
+
+<h3>For Hans</h3>
+<ul>
+<li>"You've seen data flywheels at ByteDance, Xiaomi, Airbnb. What's the pattern in defending the flywheel before network effects kick in?"</li>
+<li>"You invested in Anthropic early. How do you think about foundation models commoditizing vs. infrastructure layers capturing value?"</li>
+<li>"We think about our collection network like Tesla's fleet. Does that resonate with cross-border platform patterns you've seen?"</li>
+</ul>
+
+<h3>For Oren</h3>
+<ul>
+<li>"Monte Carlo built data observability for the warehouse. Does the data infra thesis extend to physical AI, or is this a different category?"</li>
+<li>"You run InvestInData with 30+ CDOs. Who's the equivalent 'CDO for robotics data'? Who are the buyers in the labs?"</li>
+<li>"We have open conversations with DeepMind, NVIDIA, Figure &mdash; happy to make intros. What would you want to hear from them?"</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-tactical">Tactical Notes</h2>
+
+<h3>Meeting dynamics</h3>
+<ul>
+<li>They'll divide: Hans on vision/market, Oren on product/infra. Match their register.</li>
+<li>If one goes quiet, they're processing &mdash; not disinterested.</li>
+<li>Hans responds to <strong>conviction and ambition</strong>. Oren responds to <strong>clarity and precision</strong>. You need both.</li>
+</ul>
+
+<h3>If they ask about timeline</h3>
+<blockquote><p>"We're planning to raise in June around a public launch and white paper. We wanted to build the relationship now because we want partners who deeply understand what we're building, not just a check."</p></blockquote>
+
+<h3>What NOT to do</h3>
+<ul>
+<li>Don't lead with the app. Lead with the ontological layer.</li>
+<li>Don't say "data collection." Say "task intelligence."</li>
+<li>Don't position as pre-revenue research. Say "live data business building toward a research breakthrough."</li>
+<li>Don't name-drop Palantir without the technical architecture backing it.</li>
+</ul>
+
+<h3>References they'll check</h3>
+<ul>
+<li>Oren will call lab contacts within days. Prep DeepMind, NVIDIA, Figure.</li>
+<li>Hans will ask Anthropic portfolio contacts. Keep positioning consistent.</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-arc">Meeting Arc (30 min)</h2>
+
+<table>
+<thead><tr><th>Time</th><th>Section</th><th>Energy</th></tr></thead>
+<tbody>
+<tr><td>0-2 min</td><td>The problem. "Every robot is blind."</td><td>Conviction. Let it land.</td></tr>
+<tr><td>2-5 min</td><td>The insight. Biology. Morphogenetic field.</td><td>Wonder. "The intelligence is in the field."</td></tr>
+<tr><td>5-8 min</td><td>Architecture. Manifold + landscape. Palantir.</td><td>Precision. Ontology = manifold, scoring = landscape.</td></tr>
+<tr><td>8-12 min</td><td>Product. 330MB. Training, eval, control.</td><td>Concreteness. This is real and shippable.</td></tr>
+<tr><td>12-15 min</td><td>Data engine. Tesla model. Flywheel.</td><td>Scale vision. Network effects. Global.</td></tr>
+<tr><td>15-18 min</td><td>Traction. Labs. Data slope. Team. Hari.</td><td>Proof. Momentum is real.</td></tr>
+<tr><td>18-20 min</td><td>Ambition. Not eval. Not data. Own models.</td><td>Biggest version of the vision.</td></tr>
+<tr><td>20-30 min</td><td>Q&A. Ask your questions. Feel conviction.</td><td>Conversation. Intellectual exchange.</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="m-cheat">One-Page Cheat Sheet</h2>
+
+<table>
+<thead><tr><th></th><th>Hans Tung</th><th>Oren Yunger</th></tr></thead>
+<tbody>
+<tr><td><strong>Role</strong></td><td>Managing Partner</td><td>Managing Partner</td></tr>
+<tr><td><strong>Background</strong></td><td>Stanford IE &rarr; Merrill &rarr; 2 startups &rarr; 8yr China &rarr; Notable</td><td>CS Tel Aviv &rarr; 12yr CISO &rarr; Booth MBA &rarr; Notable</td></tr>
+<tr><td><strong>Superpower</strong></td><td>Cross-geo pattern recognition. 24+ unicorns. Midas 13yr.</td><td>Operator-investor. InvestInData (30+ CDOs). Validates fast.</td></tr>
+<tr><td><strong>Key deals</strong></td><td>Anthropic, Airbnb, ByteDance, Coinbase, Slack</td><td>Monte Carlo, Browserbase, Tonic, Orca, Descope</td></tr>
+<tr><td><strong>Thesis</strong></td><td>AI prosumer. Community + content + commerce. Global.</td><td>Data infra. AI infra. "Problem, no solution, eager buyer."</td></tr>
+<tr><td><strong>Looks for</strong></td><td>Transformational vision. Learning velocity. Long-term greedy.</td><td>System clarity. Differentiated GTM. Efficiency + growth.</td></tr>
+<tr><td><strong>Your angle</strong></td><td>Prosumer flywheel. Palantir-scale. Global network.</td><td>Monte Carlo analog. Product concreteness. Data infra.</td></tr>
+<tr><td><strong>Risk</strong></td><td>"Is this AI infra or just robotics?"</td><td>"Is this research or a product?"</td></tr>
+<tr><td><strong>Check size</strong></td><td>$10-20M lead</td><td>$10-20M lead</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<!-- ==================== MEETING SCRIPT ==================== -->
+<div class="doc-container" id="doc-script">
+
+<h1>Meeting Script</h1>
+<p class="doc-subtitle">Hans Tung &amp; Oren Yunger &mdash; Conversational, founder-conviction focused. No deep technicals.</p>
+
+<div style="background: rgba(248, 113, 113, 0.08); border: 1px solid rgba(248, 113, 113, 0.2); border-radius: 10px; padding: 16px 20px; margin: 24px 0; font-size: 0.85rem;">
+<strong style="color: var(--red);">Technical ceiling:</strong> Cross-embodiment intelligence layer. No energy landscapes, no manifolds, no morphogenetics. Save all of that for the Hari follow-up.
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="s-before">Before the Meeting</h2>
+
+<p>They reached out to you. That means they've already done surface-level homework. Your job is not to prove the company is interesting &mdash; they already think it is. Your job is to make them believe that <strong>YOU</strong> are the person who will build this.</p>
+
+<p>Hans bets on founders first, companies second. Oren validates with buyers, but first he has to believe the founder sees something nobody else sees.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">0&ndash;2 min</span>
+<h2 id="s-opening">Opening: Who You Are</h2>
+
+<p><em>They'll probably start with "tell us about yourself" or "what are you working on." Start with you, not the company. Hans evaluates founders through their story arc.</em></p>
+
+<blockquote>
+<p>"Thanks for reaching out &mdash; really appreciated the note. Before I get into what we're building, I think it's useful to tell you how I got here, because Abundance didn't come from a thesis paper. It came from a pretty specific set of life experiences.</p>
+
+<p>I grew up in Bangalore. Twelve years. Both my parents come from lower-middle-class backgrounds, but I was fortunate to go to a very good prep school. And that created this strange cross-functional life where on the same day I'd be at a classmate's house &mdash; kid of a billionaire &mdash; and then I'd be on the street playing cricket with the drivers and laborers who worked in the neighborhood.</p>
+
+<p>That sounds like a throwaway detail, but it shaped how I see the world. I deeply understand and care about people across every level of society. I've seen how different the world looks depending on where you sit in it. And that lens &mdash; that empathy for how people actually live and work &mdash; is actually core to what we're building."</p>
+</blockquote>
+
+<p><em>Pause. Let them absorb. Don't rush past the personal stuff &mdash; this is what Hans remembers.</em></p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">2&ndash;6 min</span>
+<h2 id="s-thread">The Thread: Events &rarr; China &rarr; Build AI</h2>
+
+<p><em>Connect the dots. Not a resume &mdash; a narrative thread where each step reveals how you think and learn.</em></p>
+
+<blockquote>
+<p>"I moved to the U.S. and started my first company &mdash; an events marketplace. Which sounds random for someone who ends up in robotics, but events and parties are incredible indicators of social and group psychology. I was obsessed with understanding how people behave in groups, what draws them together, what creates energy in a room.</p>
+
+<p>That company taught me a lot, but it wasn't scaling with hockey stick growth, and I realized I wanted to work on the biggest problems in the world. Not the biggest markets &mdash; the biggest <em>problems</em>. The ones where if you get it right, the downstream effects are enormous.</p>
+
+<p>I got very interested in robotics, but honestly, I didn't understand it. So I moved to China."</p>
+</blockquote>
+
+<p><em>This is a big moment for Hans specifically. He spent 8 years in China. He respects founders who go where the learning is.</em></p>
+
+<blockquote>
+<p>"I co-founded Build AI in China, and the goal was to collect egocentric data for robotics. This was before anybody really cared about egocentric data. Nobody was talking about it. We were early.</p>
+
+<p>Through Build, we collected over 100,000 hours of egocentric video, open-sourced it, and that did something really powerful &mdash; it gave us access to pretty much every single prominent robotics researcher and lab in the field. When you're the people who collected and gave away the data that everyone's using, you get into rooms that are otherwise very hard to get into."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">6&ndash;9 min</span>
+<h2 id="s-insight">The Insight: Crude Oil &rarr; Jet Fuel</h2>
+
+<p><em>The most important moment. The transition from Build to Abundance shows learning velocity &mdash; Hans's #1 predictor. Don't rush it.</em></p>
+
+<blockquote>
+<p>"Through that process, I met Hari, who was at Tesla working on robot learning. And Hari changed how I think about everything.</p>
+
+<p>He told me something very simple that reframed the entire business: <strong>'You're selling crude oil. You should be selling jet fuel.'</strong></p>
+
+<p>Meaning &mdash; collecting data and handing it to labs is a commodity business. It's a race to the bottom. Someone will always do it cheaper. Someone will always have more of it. The data itself is not the value. The <em>intelligence you extract from the data</em> is the value.</p>
+
+<p>Hari was dealing with this firsthand. He was trying to train robots, and the fundamental problem wasn't that he didn't have enough data. It was that every time he trained a new robot or moved to a new task, he had to start over. The task knowledge &mdash; how to actually do something &mdash; was locked inside each specific model, for each specific robot. Not portable. Not reusable. Not interpretable.</p>
+
+<p>And he helped me understand that the real missing piece in robotics is not data, and it's not bigger models. It's an <em>intelligence layer</em> that's separate from any specific robot or policy. Something that captures how tasks actually work in the real world &mdash; and that any robot can use, regardless of who built it or how it was trained."</p>
+</blockquote>
+
+<p><em>Pause here. This is the "aha" moment. Let them sit with it.</em></p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">9&ndash;14 min</span>
+<h2 id="s-company">The Company: Cross-Embodiment Intelligence</h2>
+
+<p><em>Now you've earned the right to talk about Abundance. Keep the technical layer thin.</em></p>
+
+<blockquote>
+<p>"That's what Abundance is building. We're building the intelligence layer for physical AI.</p>
+
+<p>Right now, every robotics lab &mdash; Pi, Figure, DeepMind, Tesla &mdash; trains task knowledge directly into their policy weights. The knowledge of how to load a dishwasher or assemble a part lives inside <em>that specific model</em> for <em>that specific robot</em>. It's not extractable. You can't take what Figure learned and give it to Pi. Every new task, every new embodiment &mdash; you start over.</p>
+
+<p>We're separating the task intelligence from the robot. Building a cross-embodiment layer that captures how tasks work &mdash; independent of any specific hardware or model architecture. So any lab, any robot, any training approach can use it.</p>
+
+<p>That's the piece nobody is building, because every lab is focused on their own embodiment, their own data, their own pipeline. But the task physics &mdash; how a human loads a dishwasher, how an assembly line works &mdash; those are the same regardless of which robot is trying to learn them."</p>
+</blockquote>
+
+<h3>If they ask "how do you build that?"</h3>
+
+<blockquote>
+<p>"It starts with collecting diverse human demonstrations of the same tasks &mdash; different people, different skill levels, different environments. The variance between how an expert does something and how a novice does it is where the intelligence lives. We learn the structure of the task from that diversity and package it in a form that any lab can integrate into their training pipeline."</p>
+</blockquote>
+
+<h3>If they push for more technical detail</h3>
+
+<blockquote>
+<p>"The technicals are quite deep &mdash; Hari has written a white paper on the framework that we're going to publish alongside our launch. Happy to share it after this call. But at the level that matters for this conversation: we separate what a task requires from how any specific body accomplishes it. That separation is what makes cross-embodiment transfer possible."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">14&ndash;18 min</span>
+<h2 id="s-flywheel">The Data Flywheel: Tesla Model</h2>
+
+<p><em>Hans hears "prosumer flywheel." Oren hears "data infrastructure with a moat."</em></p>
+
+<blockquote>
+<p>"This intelligence layer is only possible to build if you have the right data &mdash; specifically, <em>diverse</em> data. Experts, amateurs, novices. Different environments, countries, body types. The diversity is what reveals the structure of the task.</p>
+
+<p>So we built an app that lets anyone in the world record themselves performing tasks and get paid. We automatically assess quality and relevance. This is the Tesla model &mdash; Tesla put sensors on millions of cars that people already drove. Every driver generates data. Every mile makes FSD smarter. We're doing the same thing with human activity.</p>
+
+<p>The flywheel: more diverse demonstrations make the intelligence layer better. Better intelligence means more labs want access. More revenue means more collection. More collection means more diversity. And the compounding advantage accelerates every cycle.</p>
+
+<p>This is the piece that got Hari excited about working with us. Nobody else has built this collection infrastructure with this diversity mandate. You can't build the intelligence layer without the data diversity. You can't get the diversity without the network. We're building both simultaneously."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">18&ndash;21 min</span>
+<h2 id="s-identity">The Identity: Palantir &rarr; Own Robots</h2>
+
+<p><em>Draw clear lines. Then show the long-term ambition.</em></p>
+
+<blockquote>
+<p>"I want to be really clear about what Abundance is and isn't.</p>
+
+<p>We do not want to be a data company. Selling raw data is a race to the bottom. Not defensible. Not interesting. We never want to sell crude oil. We want to sell jet fuel.</p>
+
+<p>What we're building is closer to what Palantir built for intelligence data. Palantir didn't build the drones or the satellites. They built the ontological layer &mdash; the system that takes messy, siloed data from every source and makes it actionable. They made data <em>legible</em> across domains. That layer became the most valuable part of the stack.</p>
+
+<p>We're building the same thing for the physical world. The layer that takes human activity data and makes it legible to robots. Regardless of which robot, which lab, which training paradigm.</p>
+
+<p>And then &mdash; the long-term vision &mdash; once you own that intelligence layer, once you have the deepest understanding of how tasks work, and once models and hardware get commoditized &mdash; which they will &mdash; you have the ability to launch your own robots. Because you have the map of the world that nobody else has."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">21&ndash;23 min</span>
+<h2 id="s-close">Personal Close</h2>
+
+<p><em>Bring it back to you. This is what makes it stick.</em></p>
+
+<blockquote>
+<p>"The reason I'm so convicted about this is that I've been on both sides of the data problem. I built a company that collected 100,000 hours of egocentric data. I gave it away. I saw how every lab uses it. And I saw that it's not enough. The data alone doesn't teach robots how to do things. Something is missing.</p>
+
+<p>Hari helped me see what's missing. And now we're building it.</p>
+
+<p>I grew up watching people across every walk of life do extraordinary things with their hands and bodies &mdash; in kitchens, in factories, on construction sites. That human skill is the most valuable dataset in the world, and right now, nobody can use it. We're going to change that."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<span class="section-num">23&ndash;30 min</span>
+<h2 id="s-conversation">The Conversation</h2>
+
+<p><em>Stop talking. Ask questions. Learn whether they're in or out.</em></p>
+
+<h3>Questions for Hans</h3>
+<ul>
+<li>"You've backed data flywheels at ByteDance and Airbnb. What did the early days of defending the flywheel look like before network effects kicked in?"</li>
+<li>"You invested in Anthropic early. How do you think about the infrastructure layers around foundation models capturing value as the models commoditize?"</li>
+</ul>
+
+<h3>Questions for Oren</h3>
+<ul>
+<li>"You've built a thesis around data infrastructure &mdash; Monte Carlo, Tonic. Does the data quality problem in robotics map to enterprise data pipelines, or is it fundamentally different?"</li>
+<li>"If you were evaluating us as a buyer &mdash; which labs or companies would you want to hear from to validate that this intelligence layer is real?"</li>
+</ul>
+
+<h3>If they ask about fundraising timeline</h3>
+<blockquote>
+<p>"We're planning to raise around June, timed to a public launch and white paper. We wanted to build the relationship now because for this round, we want partners who deeply understand the space &mdash; not just a check."</p>
+</blockquote>
+
+<h3>If they ask "what do you need from us?"</h3>
+<blockquote>
+<p>"Your conviction and your network. If you believe this layer needs to exist, the capital conversation is straightforward. What matters more is having investors who can pattern-match this to what they've seen work, who have relationships with the labs that will be our customers, and who think on a long enough timeline to let the research compound."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="s-energy">Energy Notes &amp; Guardrails</h2>
+
+<h3>How to deliver</h3>
+<ul>
+<li><strong>Start warm, not intense.</strong> The personal story should feel like a conversation, not a TED talk.</li>
+<li><strong>The crude oil &rarr; jet fuel moment is the peak.</strong> Deliver it simply. Don't over-explain.</li>
+<li><strong>Intelligence layer = quiet conviction.</strong> Not hype. Not excitement. Certainty.</li>
+<li><strong>Long-term vision = let ambition show.</strong> Hans wants to see you're thinking bigger than a Series A.</li>
+<li><strong>Don't fill silence.</strong> If they go quiet, let them think. Silence is good.</li>
+</ul>
+
+<h3>What NOT to say</h3>
+
+<div style="background: rgba(248, 113, 113, 0.08); border: 1px solid rgba(248, 113, 113, 0.2); border-radius: 10px; padding: 16px 20px; margin: 16px 0; font-size: 0.875rem;">
+<ul style="margin: 0; padding-left: 20px;">
+<li>"Energy landscape" / "morphogenetic" / "task manifold" / "gradient" &mdash; save for Hari follow-up</li>
+<li>"We're an eval company" &mdash; kiss of death</li>
+<li>"We collect data" as the lead &mdash; always say "intelligence layer" first</li>
+<li>"We're pre-revenue" &mdash; say "strategic partnerships with major labs"</li>
+<li>The 330MB package, localization adapter, PRISM &mdash; second meeting material</li>
+<li>Anything that sounds like raising money because you need to raise money</li>
+</ul>
+</div>
+
+<h3>The line that should stick</h3>
+
+<div style="background: var(--accent-glow); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 10px; padding: 20px 24px; margin: 20px 0; text-align: center;">
+<p style="font-family: 'Newsreader', Georgia, serif; font-size: 1.2rem; color: #fff; margin: 0;"><strong>"We spent two years selling crude oil. Now we're building the refinery."</strong></p>
+</div>
+
+</div>
+
+</div>
+
+<!-- ==================== DAVID'S PREP ==================== -->
+<div class="doc-container" id="doc-david">
+
+<h1>David's Prep: Notable Capital</h1>
+<p class="doc-subtitle">In-person meeting with Hans Tung, Oren Yunger &amp; Cami Katz &mdash; April 8, 2026</p>
+
+<div style="background: var(--accent-glow); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 10px; padding: 20px 24px; margin: 24px 0;">
+<p style="font-size: 0.9rem; color: var(--accent); font-weight: 600; margin-bottom: 8px;">CONTEXT FOR DAVID</p>
+<p style="margin: 0;">You haven't spoken with Notable yet. Tejes had a 45-min Zoom intro with all three of them. They then did a backchannel call with Bilal. This doc covers everything you need to walk in fully prepared tomorrow.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-who">Who is Notable Capital?</h2>
+
+<p>Notable Capital is the rebranded US arm of <strong>GGV Capital</strong>, one of the most storied cross-border VC firms. They split from GGV's Asia operations in March 2024 due to geopolitics (US-China decoupling). ~<strong>$5B AUM</strong>. Eight investors. Based in SF + NYC.</p>
+
+<p><strong>Why they matter:</strong> They write <strong>$10-50M checks</strong>, seed through Series B. They have deep cross-border operating experience (China, India, Southeast Asia, LATAM). They invested early in ByteDance, Airbnb, Anthropic, Coinbase, Slack. Hans is a 13-year Midas Lister. This is a tier-1 firm.</p>
+
+<p><strong>How we got here:</strong> They reached out to us through Ari (inbound). This was not us chasing them. They are actively interested.</p>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-profiles">The Three People in the Room</h2>
+
+<div class="cheat-grid" style="grid-template-columns: 1fr;">
+
+<div class="cheat-card hans">
+<h4>Hans Tung &mdash; Managing Partner</h4>
+<p><strong>Background:</strong> Born in Taiwan, raised in LA. Stanford BS in Industrial Engineering. Wall Street &rarr; two startups &rarr; 8 years investing in China &rarr; back to Silicon Valley in 2013. Leads Notable's AI-driven Prosumer, Commerce, and Fintech practice.</p>
+<p><strong>Track record:</strong> 24+ unicorns. Four $30B+ exits (Airbnb, Coinbase, Slack, Rednote). Four $100B+ outcomes (ByteDance, Anthropic). Forbes Midas List 13 consecutive years, top 10 for five straight.</p>
+<p><strong>Investing thesis:</strong> AI prosumer platforms. Community + content + commerce. Cross-geography pattern recognition. Long-term compounding. "Long-term greedy" founders.</p>
+<p><strong>In the first call he:</strong> Told us he got interested in physical AI and data while living in China. Understands the manufacturing &amp; robotics gap between US and China deeply. Asked about hardware, app virality, and consumer growth hacks. Offered to intro us to <strong>Hugo Barra at Dexterity</strong> and the <strong>co-founder of Xiaomi</strong>. He was an early Xiaomi investor and says he gave Lei Jun the idea for Redmi with MediaTek chips. Told us he was also invested in DD (China), Grab (SE Asia), and Joker Hons.</p>
+<p><strong>How to play him:</strong> Vision. Ambition. Global scope. Flywheel dynamics. He pattern-matches to ByteDance, Airbnb, Tesla fleet learning. Show him we think bigger than a Series A.</p>
+</div>
+
+<div class="cheat-card oren">
+<h4>Oren Yunger &mdash; Managing Partner</h4>
+<p><strong>Background:</strong> CS degree from Tel Aviv College. 12 years as CISO in Israeli cybersecurity ecosystem. MBA from Chicago Booth. Co-founded two investing communities: <strong>SVCI</strong> (CISOs) and <strong>InvestInData</strong> (30+ CDOs). Created "Rising in Cyber" annual list.</p>
+<p><strong>Track record:</strong> Board seats at Monte Carlo, Drata, Orca Security, Coder, Descope, Tonic, Torq, Wing Security, and more. Leads Notable's cybersecurity, cloud infra, AI, data, and dev tools practice.</p>
+<p><strong>Investing thesis:</strong> Practitioner lens. "Critical problem, no solution, eager buyer." Data quality. Capital efficiency + growth. Validates deals by calling 10+ buyers in days.</p>
+<p><strong>In the first call he:</strong> Was the most direct questioner. Pushed on monetization &mdash; "who do you charge? what exactly is the service?" Asked about competition. Asked about team needs and what success looks like. Asked about our funding history and next round size. Very focused on the business model and path to revenue.</p>
+<p><strong>How to play him:</strong> Clarity. Precision. Concrete product description. Data pipeline details. He's an operator &mdash; he wants to see the system, not just the vision. If we can show him that labs are eager buyers with no existing solution, he's in.</p>
+</div>
+
+<div class="cheat-card cami">
+<h4>Cami Katz &mdash; Investor</h4>
+<p><strong>Background:</strong> BS and MS in Management Science &amp; Engineering from Stanford. Investment banking at Morgan Stanley. Global technology investor at DiDi (the Uber of China that Notable/GGV backed). Co-authored with Hans on commerce investments.</p>
+<p><strong>Focus:</strong> Fintech and commerce. Works closely with Hans on prosumer investments.</p>
+<p><strong>In the first call she:</strong> She was Speaker 4 &mdash; actually the one who opened the meeting and gave Notable's background. She drove most of the early conversation. Asked smart questions about hardware limitations vs. end-state needs, app virality features, payout economics to collectors, and the prioritization of which tasks to capture data for. She clearly did homework before the call.</p>
+<p><strong>How to play her:</strong> Don't underestimate her. She was the most engaged questioner alongside Oren. She thinks about consumer dynamics, marketplace economics, and unit economics of the collection side. She's likely the one doing the most day-to-day diligence work on this deal.</p>
+</div>
+
+</div>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-first-meeting">How Tejes's First Meeting Went</h2>
+
+<p>45-minute Zoom call. All three Notable investors (Hans, Oren, Cami) on the call. Tejes joined from Bangalore. Tone was warm, curious, and engaged throughout.</p>
+
+<h3>What Tejes Covered</h3>
+<ul>
+<li><strong>Personal story:</strong> Growing up in Bangalore, moving to US, cricket background, the adjustment. Built a wildfire detection hardware device in high school ($100K in prizes). Built the party app at UCLA, dropped out, raised a couple million, scaled to 500K users. Stepped down, wanted bigger problems.</li>
+<li><strong>China &amp; Build AI:</strong> Moved to China to learn robotics. Met Eddie. Co-founded Build AI. Manufactured thousands of data collection devices. Collected 100,000 hours of egocentric data. Open sourced it &rarr; went viral &rarr; got access to every major lab.</li>
+<li><strong>The crude oil moment:</strong> Met Hari (head of Tesla Optimus). Hari said "you're selling crude oil, labs want jet fuel." Raw data alone isn't the bottleneck &mdash; understanding tasks is.</li>
+<li><strong>Why he split from Build:</strong> Strategic difference. Build focused on data scaling (most hours). Tejes + David wanted to build in the eval space, something more technical. Still friends with the Build team.</li>
+<li><strong>The extractive data problem:</strong> Collecting data in India felt extractive. Factory owners had no gain. Wanted to build an app where anyone can collect and get compensated &mdash; more diverse data, better incentive alignment.</li>
+<li><strong>What Abundance is building:</strong> The intelligence layer for robotics. Cross-embodiment task understanding. Reward model based on human data. Any lab or policy can use it. Not selling data &mdash; building an API-like product.</li>
+<li><strong>Hardware demo:</strong> Showed the $10 headband camera + mobile app. Live demo of recording, auto-upload (faster than YouTube), quality detection, hand-in-frame warnings. Works on $150 Android phones.</li>
+<li><strong>Team:</strong> Hari joined as co-founder (part-time, multi-project). Hired researchers from Tesla, Nvidia. Hired a controls researcher. David in Shenzhen running manufacturing.</li>
+<li><strong>Fundraising:</strong> Raised $6M seed led by Bilal Zuberi at Red Glass. Looking to raise ~$20M within two months. Paper ~75% done, targeting release in 5 weeks.</li>
+</ul>
+
+<h3>What They Asked &amp; What Stood Out</h3>
+
+<table>
+<thead><tr><th>Topic</th><th>Who Asked</th><th>Key Detail</th></tr></thead>
+<tbody>
+<tr><td>Cross-embodiment strategy</td><td>Cami</td><td>Wanted specifics on what the team looks like for the technical work, and whether we have the right people or are hiring</td></tr>
+<tr><td>Monetization</td><td>Oren</td><td>Pushed hard: "who do you charge? what's the service?" Tejes said robotics companies, API-like reward model access at test/deploy time. Oren asked if our eval will be better than theirs &mdash; Tejes said yes + labs want broad eval coverage</td></tr>
+<tr><td>Moat &amp; defensibility</td><td>Hans</td><td>Tejes said: technical approach is novel (gives lead, not moat). Real moat = network effects from the mobile app + proprietary data flywheel. $10 hardware, works on every Android, people earn from their pocket</td></tr>
+<tr><td>Hardware end-state</td><td>Cami</td><td>Asked if the headband is enough or if we need gloves/joints. Tejes: we build semantic task understanding, not geometric &mdash; so monocular + IMU is sufficient. Multi-cam and 6-cam also built. Can substitute better hardware to best collectors over time</td></tr>
+<tr><td>Why in-home first?</td><td>Hans</td><td>Most general use case. Every house is different. Bot Company, Sunday, Figure, Tesla all looking at home deployments. Needs the most general robot.</td></tr>
+<tr><td>Collector payouts</td><td>Cami</td><td>Benchmarked against Swiggy/Rapido (~$2.20/hr). Currently paying near-full to build habit. Running onboarding events to hand devices to people directly.</td></tr>
+<tr><td>App virality</td><td>Cami</td><td>Tejes mentioned leaderboards, referral fees, organizer roles. Currently hiring from labor marketplaces (1000 chefs, etc.) with high in-person conversion rate.</td></tr>
+<tr><td>Data quality control</td><td>Oren</td><td>How to avoid boring/garbage data? Hands-in-frame detection + immediate payout feedback loop + upfront user education + in-person onboarding events.</td></tr>
+<tr><td>Camera placement</td><td>Hans</td><td>Forehead still best for intent (eye-level). Chest mount has too severe data quality drop-off. Glasses ideal but can't fit compute. Headband is second-best.</td></tr>
+<tr><td>Competition</td><td>Oren</td><td>"Race to the bottom" &mdash; Tejes positioned data as commodity, Abundance as intelligence layer. Evals will be bigger bottleneck than data.</td></tr>
+<tr><td>Success vision</td><td>Oren</td><td>Tejes: build the best robots, biggest fleet. In the meanwhile, make data collection non-extractive. "I believe in positive sum games."</td></tr>
+<tr><td>What comes next</td><td>Oren</td><td>Asked for materials: paper, device videos, product vision. Tejes offered to share what he can. Hans offered Xiaomi + Hugo Barra intros.</td></tr>
+</tbody>
+</table>
+
+<h3>Vibe Check</h3>
+<ul>
+<li><strong>Very positive.</strong> Hans was offering intros unprompted (Xiaomi co-founder, Hugo Barra at Dexterity, DD/Grab teams).</li>
+<li>Oren was respectful of time &mdash; "I know it's late there" &mdash; and asked for follow-up materials, suggesting genuine interest in going deeper.</li>
+<li>Cami was the most conversationally active, driving ~40% of the questions.</li>
+<li>Hans closed with: "Look at our bios. You'll see a lot of portfolio companies you'll want to talk to." That's a buy signal.</li>
+<li>They explicitly asked Tejes to let them know when he's back in SF &mdash; wanted to meet in person. That's why we're here tomorrow.</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-bilal-meeting">How the Bilal Backchannel Went</h2>
+
+<p>After our first meeting, Notable reached out to Bilal Zuberi (our lead investor, Red Glass VC) to do a reference call. This is standard &mdash; and a very good sign. They wouldn't backchannel if they weren't seriously considering us.</p>
+
+<h3>What Bilal Told Them</h3>
+<ul>
+<li><strong>Positioned us as building an incredible business</strong> focused on both short-term and long-term success &mdash; compared to other companies that focus only on short term.</li>
+<li><strong>Described the team as:</strong> "Scrappy, hustling, wicked smart. Will avail any and all opportunities to build a big business."</li>
+<li><strong>Framed us as:</strong> "Deeply technical but hustling as hell founders. You will do anything and everything necessary to command attention, build revenues that scale rapidly, and construct a massive business."</li>
+<li><strong>Talked about Hari:</strong> Described him as helping us "secretly develop an ontological map layer on top of collected data" &mdash; the key differentiator. Noted this allows users to understand how data can be used across different stages and types of model development.</li>
+<li><strong>Shared the three-layer roadmap:</strong> Tooling &rarr; Platform &rarr; Applications (analogous to Applied Intuition, Scale AI, Microsoft)</li>
+<li><strong>Made the cybersecurity analogy:</strong> "Not all labs will build their own comprehensive benchmarks, eval tool chain and reward models. Same way cybersecurity isn't built in-house by every company."</li>
+<li><strong>Traction data:</strong> ~2,000 hardware units deployed (mostly hotels). Targeting 100,000+ hours available next month &mdash; likely second-largest dataset after Build.</li>
+</ul>
+
+<h3>How Notable Reacted</h3>
+<ul>
+<li><strong>Main concern:</strong> Tension between Act One (data revenue, close lab relationships) vs. Act Two (model-building, delayed monetization). They seemed worried we might <em>miss out on near-term revenue</em> that labs are handing out (including Nvidia) and not make it to the reward model phase.</li>
+<li>Asked about <strong>vertical vs. horizontal</strong> eval model strategy.</li>
+<li>Asked whether <strong>Pi / generalist labs</strong> will eventually do this themselves. Bilal countered: Pi's focus is generalizability across hardware, not fine-tuning for specific industrial use cases. Precedent: Pi initially said they'd handle data internally, now partnered with xDof (a Lux portfolio company).</li>
+<li><strong>Overall read from Bilal:</strong> "Strong vision, differentiated approach. Still open questions on monetization path."</li>
+<li><strong>Next step:</strong> They want to spend more time with Tejes and David to go deeper. That's tomorrow.</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-bilal-advice">Bilal's Advice to Us</h2>
+
+<div class="callout callout-accent">
+<p style="font-weight: 600; color: var(--accent); margin-bottom: 12px;">THE CORE MESSAGE FROM BILAL</p>
+<p><strong>Don't only talk about long-term model development.</strong> Notable will be concerned if we only pitch the research vision without showing that we have all of this data across all modalities and use cases, and that we can find interesting ways to monetize <em>while</em> building deep relationships for future robot foundation model work.</p>
+</div>
+
+<h3>What to project:</h3>
+<ol>
+<li><strong>Short-term winners:</strong> "We will win in the short term because we will out-hustle everybody else." Show energy, revenue path, data collection velocity, scrappiness.</li>
+<li><strong>Long-term builders:</strong> "We will win in the long term because we have strong, long-term technical views and relationships in the space." Show research depth, Hari's involvement, the reward model vision.</li>
+<li><strong>Strong opinions, weakly held:</strong> Bilal mentioned that when Tejes met Malhar at Applied Intuition earlier in fundraising, the mistake was giving a sense of "trying this to see if it works" without knowing exactly what needed to get done. <strong>Notable wants conviction.</strong> Have strong opinions about what needs to happen, but show adaptability in how you get there.</li>
+</ol>
+
+<h3>The framing that works:</h3>
+<blockquote>
+<p>"We bring the ability to quickly create revenues, access, and interest &mdash; but also what is sometimes rare: a real interest in building something big that is long-lasting."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-strategy">Strategy for Tomorrow's In-Person</h2>
+
+<h3>The Dynamic</h3>
+<p>This is a <strong>second meeting</strong>. They've already heard the pitch from Tejes. They've already backchanneled with Bilal. They're past "is this interesting?" and into "is this real and can this team execute?" Your job, David, is to demonstrate the <strong>operational and technical depth</strong> that complements Tejes's vision and storytelling.</p>
+
+<h3>What They Already Know</h3>
+<ul>
+<li>The narrative (crude oil &rarr; jet fuel, intelligence layer, cross-embodiment)</li>
+<li>The app and hardware ($10 device, Android, collection in India)</li>
+<li>The team structure (Hari as advisor/co-founder, researchers from Tesla/Nvidia)</li>
+<li>The raise ($6M from Red Glass, looking for ~$20M)</li>
+<li>The paper is coming (~5 weeks)</li>
+</ul>
+
+<h3>What They Still Want to Understand</h3>
+<ul>
+<li><strong>Near-term revenue path:</strong> Their #1 concern. How will we make money <em>this year</em>? Be concrete.</li>
+<li><strong>Manufacturing and ops depth:</strong> David, this is your domain. The Shenzhen manufacturing, the hardware iteration pipeline, the operational machine.</li>
+<li><strong>Product specifics:</strong> What does a customer actually receive? How does integration work?</li>
+<li><strong>Why us vs. Build:</strong> They'll want to understand the split at a deeper level. Keep it clean &mdash; strategic divergence, we're the technical + intelligence play, they're the data volume play.</li>
+<li><strong>Hari's involvement:</strong> They know he's not full-time. Be honest but frame it as a strength: he gives us research direction, taste, and credibility. The execution team (us) runs full speed.</li>
+</ul>
+
+<h3>Role Division for Tomorrow</h3>
+
+<table>
+<thead><tr><th></th><th>Tejes</th><th>David</th></tr></thead>
+<tbody>
+<tr><td><strong>Vision &amp; narrative</strong></td><td>Lead</td><td>Support</td></tr>
+<tr><td><strong>Manufacturing &amp; hardware</strong></td><td>Support</td><td>Lead &mdash; Shenzhen ops, device iteration, supply chain, cost structure</td></tr>
+<tr><td><strong>Data collection ops</strong></td><td>Lead (India ground game)</td><td>Support (China pilot, scaling plans)</td></tr>
+<tr><td><strong>Technical depth</strong></td><td>High-level framing</td><td>Lead on pipeline, engineering, infra</td></tr>
+<tr><td><strong>Revenue &amp; monetization</strong></td><td>Both &mdash; show conviction on near-term revenue</td><td>Both</td></tr>
+<tr><td><strong>Fundraising specifics</strong></td><td>Lead</td><td>Support</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-address">Address Their Concern Head-On</h2>
+
+<p>Notable's biggest worry: <em>"They might miss the near-term data revenue window while chasing the long-term research bet."</em></p>
+
+<p>You need to kill this concern. Here's how:</p>
+
+<h3>Show the near-term revenue path is real</h3>
+<blockquote>
+<p>"We're not choosing between revenue and research. The data marketplace funds the research. Labs like Nvidia are paying for data <em>right now</em>. We're building relationships with every major lab through data engagements, and those same relationships become our distribution for the reward model when it's ready.</p>
+<p>We're not waiting two years to make money. We're making money now and using it to build something much bigger."</p>
+</blockquote>
+
+<h3>Show the hustle</h3>
+<blockquote>
+<p>"David's in Shenzhen building the manufacturing line from scratch. Tejes is in Bangalore for 30 days straight going door to door. We have 2,000 devices deployed. We're hiring from labor marketplaces, onboarding a thousand people at a time. This isn't a research lab waiting for a paper &mdash; this is an operational machine that also has a deep technical vision."</p>
+</blockquote>
+
+<h3>Bridge short and long term</h3>
+<blockquote>
+<p>"The data engagements give us revenue and lab access. The lab access gives us feedback loops for the reward model. The reward model is the real defensible asset. Each phase funds and enables the next. This is Applied Intuition's playbook &mdash; tooling first, platform second, applications third."</p>
+</blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-questions">Questions They Might Ask David Specifically</h2>
+
+<h4>"Tell me about the manufacturing operation."</h4>
+<blockquote><p>Be specific: Shenzhen setup, how many devices per batch, cost per unit ($10), the pipeline from mono to multi-cam to 6-cam, how quickly you can iterate. Show that this is a real manufacturing practice, not prototyping.</p></blockquote>
+
+<h4>"How do you scale data collection beyond India?"</h4>
+<blockquote><p>China pilot is already running. Indonesia and Vietnam are next. The app + cheap hardware model works globally. The key is local onboarding &mdash; labor marketplace strategy + in-person device handoff.</p></blockquote>
+
+<h4>"What's the technical architecture of the pipeline?"</h4>
+<blockquote><p>Video upload (chunked, locked FPS, faster than YouTube) &rarr; quality assessment (hands in frame, lighting, occlusion) &rarr; skill-level classification &rarr; manifold pipeline &rarr; reward model training. Be concrete. Oren especially wants to see the system.</p></blockquote>
+
+<h4>"Why did you and Tejes leave Build?"</h4>
+<blockquote><p>Keep it clean and forward-looking: "Build is a data volume play. We wanted to build the intelligence layer &mdash; something more technical, more defensible. Different strategic bets, same mission of advancing robotics. Still friends, still respect what they're building."</p></blockquote>
+
+<h4>"What happens if the reward model doesn't work?"</h4>
+<blockquote><p>"We still have the fastest-growing diverse robotics dataset, a working marketplace, and deep lab relationships. The data business is real regardless. But we have very strong conviction in the reward model &mdash; early experiments are working, and Hari's technical direction is grounded in his years at Tesla."</p></blockquote>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-donts">Things to NOT Say</h2>
+
+<div style="background: rgba(248, 113, 113, 0.08); border: 1px solid rgba(248, 113, 113, 0.2); border-radius: 10px; padding: 16px 20px; margin: 16px 0; font-size: 0.875rem;">
+<ul style="margin: 0; padding-left: 20px;">
+<li><strong>"We're trying this to see if it works"</strong> &mdash; this is what killed the Applied Intuition meeting. Have strong opinions.</li>
+<li><strong>"We don't know how we'll monetize yet"</strong> &mdash; you DO know. Data marketplace now, reward model API next.</li>
+<li><strong>"Hari is part-time"</strong> &mdash; say "co-founder" and describe his active involvement (multiple calls/week, co-authoring paper, research direction, hiring pipeline).</li>
+<li><strong>"We're pre-revenue"</strong> &mdash; say "strategic data partnerships with major labs" and talk about the revenue timeline (this summer).</li>
+<li><strong>Anything negative about Build</strong> &mdash; only speak positively. "Different strategic bets."</li>
+<li><strong>Deep technical jargon unprompted</strong> &mdash; energy landscapes, manifolds, morphogenetics &mdash; save for the Hari follow-up meeting. Keep it at "intelligence layer" and "reward model."</li>
+</ul>
+</div>
+</div>
+
+<hr>
+
+<div class="fade-section">
+<h2 id="d-cheatsheet">One-Page Cheat Sheet</h2>
+
+<table>
+<thead><tr><th>Topic</th><th>Key Point</th></tr></thead>
+<tbody>
+<tr><td><strong>Notable Capital</strong></td><td>~$5B AUM, formerly GGV. Seed to Series B. $10-50M checks. Deep Asia experience.</td></tr>
+<tr><td><strong>Hans Tung</strong></td><td>Managing Partner. Taiwan &rarr; Stanford &rarr; 8yr China. ByteDance, Airbnb, Anthropic. Pattern recognizer. Wants vision + ambition + global scale.</td></tr>
+<tr><td><strong>Oren Yunger</strong></td><td>Managing Partner. Israeli CISO &rarr; Chicago Booth. Monte Carlo, Orca. Operator lens. Wants clarity + product specifics + eager buyers.</td></tr>
+<tr><td><strong>Cami Katz</strong></td><td>Investor. Stanford MSE. Morgan Stanley &rarr; DiDi. Works with Hans on prosumer. Sharp on marketplace dynamics &amp; unit economics.</td></tr>
+<tr><td><strong>Their main concern</strong></td><td>We'll miss near-term data revenue chasing long-term research. Counter: we do both. Data funds research.</td></tr>
+<tr><td><strong>Bilal's framing</strong></td><td>"Deeply technical but hustling as hell." Win short-term by out-hustling, win long-term with technical vision.</td></tr>
+<tr><td><strong>What they offered</strong></td><td>Intros to Xiaomi co-founder, Hugo Barra (Dexterity), DD, Grab, Joker Hons teams.</td></tr>
+<tr><td><strong>What they asked for</strong></td><td>Paper, device videos, product vision docs, and this in-person meeting.</td></tr>
+<tr><td><strong>Our raise</strong></td><td>$6M seed from Red Glass. Targeting ~$20M. Paper in ~5 weeks.</td></tr>
+<tr><td><strong>The line to remember</strong></td><td><em>"We spent two years selling crude oil. Now we're building the refinery."</em></td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+</main>
+
+<script>
+// Document switching
+function switchDoc(docId) {
+  document.querySelectorAll('.doc-container').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('doc-' + docId).classList.add('active');
+  document.querySelector('.nav-item[data-doc="' + docId + '"]').classList.add('active');
+  document.getElementById('main-scroll').scrollTop = 0;
+  window.scrollTo(0, 0);
+  buildTOC(docId);
+  triggerFadeIn();
+}
+
+// Build TOC from h2 elements
+function buildTOC(docId) {
+  const toc = document.getElementById('toc');
+  toc.innerHTML = '';
+  const doc = document.getElementById('doc-' + docId);
+  const headings = doc.querySelectorAll('h2[id]');
+  headings.forEach(h => {
+    const item = document.createElement('a');
+    item.className = 'toc-item';
+    item.textContent = h.textContent.substring(0, 40) + (h.textContent.length > 40 ? '...' : '');
+    item.href = '#' + h.id;
+    item.onclick = function(e) {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    toc.appendChild(item);
+  });
+}
+
+// Reading progress
+window.addEventListener('scroll', function() {
+  const winScroll = document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+  document.getElementById('progress-bar').style.width = scrolled + '%';
+});
+
+// Fade in sections on scroll
+function triggerFadeIn() {
+  const sections = document.querySelectorAll('.doc-container.active .fade-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  sections.forEach(s => {
+    s.classList.remove('visible');
+    observer.observe(s);
+  });
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  if (e.key === '1') switchDoc('narrative');
+  if (e.key === '2') switchDoc('reference');
+  if (e.key === '3') switchDoc('meeting');
+  if (e.key === '4') switchDoc('script');
+  if (e.key === '5') switchDoc('david');
+});
+
+// Init
+buildTOC('narrative');
+triggerFadeIn();
+</script>
+
+</body>
+</html>
